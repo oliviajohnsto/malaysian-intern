@@ -1,0 +1,15 @@
+.admin-field-id {
+    width: 120px;
+}
+
+.admin-field-item {
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+}
+
+.admin-field-item-container {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}

@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyAD7CruHVy1EGsNZaSpBuswKVnwnImqwWo",
+            authDomain: "malaysian-intern.firebaseapp.com",
+            databaseURL: "https://malaysian-intern.firebaseio.com",
+            projectId: "malaysian-intern",
+            storageBucket: "malaysian-intern.appspot.com",
+            messagingSenderId: "1002417063231"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script type="text/javascript" src="admin.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="admin.css">
+    </head>
+    <body ng-app="adminApp" ng-controller="adminCtrl" class="admin-field-item-container">
+        <h3 style="margin-top: 20px;">Create a New Posting</h3>
+        <form style="margin-bottom: 20px;">
+            <div ng-repeat="field in fields">
+                <div ng-if="field.type == 'input'"
+                     class="admin-field-item">
+                    <div class="admin-field-id">
+                        {{field.$id}}:
+                    </div>
+                    <textarea ng-model="newPosting[field.$id]">
+                    </textarea>
+                </div>
+                <div ng-if="field.type == 'select'"
+                     class="admin-field-item">
+                    <div class="admin-field-id">
+                        {{field.$id}}:
+                    </div>
+                    <select ng-model="newPosting[field.$id]" name="{{field.$id}}">
+                        <option ng-repeat="subfield in field.fields" value="{{subfield}}">
+                            {{subfield}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </form>
+        <button type="button" class="btn btn-success" ng-click="pushPosting()">Submit</button>
+        <pre>newPosting = {{newPosting | json}}</pre>
+    </body>
+</html>
