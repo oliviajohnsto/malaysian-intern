@@ -19,32 +19,78 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="admin.css">
     </head>
-    <body ng-app="adminApp" ng-controller="adminCtrl" class="admin-field-item-container">
-        <h3 style="margin-top: 20px;">Create a New Posting</h3>
-        <form style="margin-bottom: 20px;">
-            <div ng-repeat="field in fields">
-                <div ng-if="field.type == 'input'"
-                     class="admin-field-item">
-                    <div class="admin-field-id">
-                        {{field.$id}}:
+    <body ng-app="adminApp" ng-controller="adminCtrl">
+        <!-- Create posting -->
+        <div class="admin-field-item-container">
+            <h3 style="margin-top: 20px;">Create a New Posting</h3>
+            <form style="margin-bottom: 20px;">
+                <div ng-repeat="field in fields">
+                    <div ng-if="field.type == 'input'"
+                         class="admin-field-item">
+                        <div class="admin-field-id">
+                            {{field.$id}}:
+                        </div>
+                        <textarea ng-model="newPosting[field.$id]">
+                        </textarea>
                     </div>
-                    <textarea ng-model="newPosting[field.$id]">
-                    </textarea>
+                    <div ng-if="field.type == 'select'"
+                         class="admin-field-item">
+                        <div class="admin-field-id">
+                            {{field.$id}}:
+                        </div>
+                        <select ng-model="newPosting[field.$id]" name="{{field.$id}}">
+                            <option ng-repeat="subfield in field.fields" value="{{subfield}}">
+                                {{subfield}}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div ng-if="field.type == 'select'"
-                     class="admin-field-item">
-                    <div class="admin-field-id">
-                        {{field.$id}}:
+            </form>
+            <button type="button" class="btn btn-success" ng-click="pushPostingFn()">Submit</button>
+<!--             <pre>newPosting = {{newPosting | json}}</pre> -->
+        </div>
+        <!-- Edit fields -->
+        <div class="admin-field-item-container">
+            <h3 style="margin-top: 20px;">Edit Fields</h3>
+            <div>
+                <div ng-repeat="field in fields">
+                    <div ng-if="field.type == 'select'"
+                         class="admin-field-item">
+                        <div  class="admin-edit-field-id">Add entry to {{field.$id}}: </div>
+                        <input type="text" ng-model="updateField[field.$id]">
                     </div>
-                    <select ng-model="newPosting[field.$id]" name="{{field.$id}}">
-                        <option ng-repeat="subfield in field.fields" value="{{subfield}}">
-                            {{subfield}}
-                        </option>
-                    </select>
                 </div>
             </div>
-        </form>
-        <button type="button" class="btn btn-success" ng-click="pushPosting()">Submit</button>
-        <pre>newPosting = {{newPosting | json}}</pre>
+            <button type="button" class="btn btn-success" ng-click="updateFieldFn()">Update Field</button>
+            <!-- <pre>updateField = {{updateField | json}}</pre> -->
+        </div>
+
+        <!-- Delete entries -->
+        <div class="admin-field-item-container">
+            <h3 style="margin-top: 20px;">Delete Entries</h3>
+            <div>
+                <select ng-model="postingToDelete">
+                    <option ng-repeat="posting in postings"
+                            value="{{posting.$id}}">
+                        {{posting.name}}
+                    </option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-success" ng-click="deletePostingFn()">Delete Entry</button>
+            <!-- <p>{{postingToDelete}}</p> -->
+        </div>
+
     </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+

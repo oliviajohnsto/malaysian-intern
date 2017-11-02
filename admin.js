@@ -1,4 +1,4 @@
-
+/** Defines an angular module to handle firebase data */
 
 var app = angular.module('adminApp', ['firebase']);
 app.controller('adminCtrl', ['$scope', '$firebaseArray',
@@ -8,39 +8,29 @@ app.controller('adminCtrl', ['$scope', '$firebaseArray',
 
         $scope.fields = $firebaseArray(fieldsRef);
         $scope.postings = $firebaseArray(postingsRef);
-        $scope.submitPostingFn = submitPosting;
         $scope.newPosting = {};
+        $scope.updateField = {};
+        $scope.postingToDelete;
 
-        $scope.pushPosting = function() {
-            alert(angular.copy($scope.newPosting));
+        $scope.pushPostingFn = function() {
+            $scope.postings.$add($scope.newPosting);
+            $scope.newPosting = {};
         };
+
+        $scope.updateFieldFn = function() {
+            var keys = Object.keys($scope.updateField);
+            keys.forEach((key) => {
+                var keyPath = '/fields/' + key + '/fields';
+                var keyArray = $firebaseArray(firebase.database().ref(keyPath));
+                keyArray.$add($scope.updateField[key]);
+            });
+            $scope.updateField = {};
+        };
+
+        $scope.deletePostingFn = function() {
+            console.log("deleting " + $scope.postingToDelete);
+            $scope.postings.$remove($scope.postings.$getRecord($scope.postingToDelete));
+        }
     }
 ]);
-
-function submitPosting() {
-    alert('submit');
-}
-
-
-// firebase.ref('fields/').set({
-//     name: {
-//         type: 'input',
-//     },
-//     description: {
-//         type: 'input',
-//     },
-//     pay: {
-//         type: 'select',
-//         fields: ['Paid', 'Unpaid'],
-//     },
-//     location: {
-//         type: 'select',
-//         fields: ['Kuala Lumpur'],
-//     },
-//     type: {
-//         type: 'select',
-//         fields: ['Government']
-//     },
-// });
-
 
