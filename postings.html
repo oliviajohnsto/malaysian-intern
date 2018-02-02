@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+        <script src="https://use.fontawesome.com/e4104683b2.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyAD7CruHVy1EGsNZaSpBuswKVnwnImqwWo",
+            authDomain: "malaysian-intern.firebaseapp.com",
+            databaseURL: "https://malaysian-intern.firebaseio.com",
+            projectId: "malaysian-intern",
+            storageBucket: "malaysian-intern.appspot.com",
+            messagingSenderId: "1002417063231"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script type="text/javascript" src="postings.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="postings.css">
+    </head>
+    <body ng-app="mainApp" ng-controller="mainCtrl">
+        <!-- navigation -->
+        <div class="navigation">
+            <img src="i4gLogo.png" class="logo-img">
+            <i class="fa fa-search fa-lg search-icon" aria-hidden="true" data-toggle="modal" data-target="#search-panel-modal"></i>
+        </div>
+
+        <!-- search modal -->
+        <div class="modal fade" id="search-panel-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Filter Results</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="input-name">Name: </label>
+                        <input class="form-control" id="input-name" ng-model="searchCriteria.name">
+                        <div ng-repeat="field in fields">
+                            <div ng-if="field.type == 'select'"
+                                 class="admin-field-item">
+                                <div class="admin-field-id">
+                                    {{field.$id}}:
+                                </div>
+                                <div class="form-check form-check-inline"
+                                    ng-repeat="subfield in field.fields">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox" id="checkbox-{{field.$id}}-{{subfield}}" value="{{subfield}}" ng-model="searchCriteria[field.$id][subfield]"> {{subfield}}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" ng-click="updateSearchFn()">Update Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- postings list -->
+        <div class="index-posting-list">
+            <!-- individual postings -->
+            <div ng-repeat="posting in postings"
+                 ng-if="displayPostingFn(posting)"
+                 class="index-posting-container background{{$index % 5}}">
+                <h2 class="posting-name"
+                    data-toggle="modal" data-target="#posting-modal-{{$index}}">
+                    {{posting.name}}
+                </h2>
+                <div class="index-posting-desc-container"
+                    data-toggle="modal" data-target="#posting-modal-{{$index}}">
+                    <p><em>{{posting.location}}, {{posting.pay}}</em></p>
+                    <p>
+                        {{posting.description}}
+                    </p>
+                </div>
+                <!-- <div class="index-posting-tag-container">
+                    <div ng-repeat="(key, value) in posting"
+                         ng-if="displayFieldFn(key)">
+                        <strong>{{capitalizeFirstLetterFn(key)}}:</strong> {{value}}
+                    </div>
+                </div> -->
+                <div>
+                    <a class="posting-link" data-toggle="modal" data-target="#posting-modal-{{$index}}" href="#">Learn More</a>
+                    <a class="posting-link" href="{{posting.url}}" target="_blank">Apply</a>
+                </div>
+
+                <div class="modal fade" id="posting-modal-{{$index}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{posting.name}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div ng-repeat="(key, value) in posting"
+                                     ng-if="displayFieldFn(key)">
+                                    <strong>{{capitalizeFirstLetterFn(key)}}:</strong> {{value}}
+                                </div>
+                                <p><strong>Description:</strong> {{posting.description}}</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a class="posting-link" href="{{posting.url}}" target="_blank">Apply</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer">
+            <p>INTERN FOR GOOD</p>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

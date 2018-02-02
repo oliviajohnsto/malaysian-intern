@@ -6,10 +6,55 @@ html {
 .background {
     display: flex;
     justify-content: space-between;
-    flex-direction: column;
-    color: #00F;
+    flex-direction: row;
+    background-color: #80B8DA;
+    /*background-image: url("i4gLogoHomeCrop.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left;*/
     width: 100%;
     height: 100%;
+    align-content: stretch;
+    align-items: stretch;
+}
+
+.hmpg-abt {
+    font-weight: 600;
+    font-size: 72;
+}
+
+.hmpg-abt-text {
+    font-size: 20;
+}
+
+.home-mid-cont {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: stretch;
+}
+
+.summary-cont {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    width: 50px;
+    padding: 40px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-cont {
+    background-color: #000;
+    margin: 0px;
+    padding: 0px;
+    background-image: url("i4gLogoHomeCrop.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left;
+    flex-grow: 2;
+    width: 50px;
 }
 
 /* Nav bar. */
@@ -21,7 +66,6 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0px 10px;
     z-index:400;
 }
 
@@ -49,6 +93,23 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.enter-link {
+    text-align: center;
+    padding: 5px 30px;
+    border: 1px solid #000;
+    width: auto;
+    color: #000;
+    font-weight: 200;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+
+.enter-link:hover {
+    text-decoration: none;
+    color: #fff;
+    background-color: #000;
 }
 
 
