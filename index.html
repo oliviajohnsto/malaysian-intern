@@ -19,9 +19,9 @@
           };
           firebase.initializeApp(config);
         </script>
-        <script type="text/javascript" src="index.js"></script>
+        <script type="text/javascript" src="postings.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="index.css">
+        <link rel="stylesheet" type="text/css" href="postings.css">
     </head>
     <body ng-app="mainApp" ng-controller="mainCtrl">
         <!-- navigation -->
@@ -68,14 +68,15 @@
         <!-- postings list -->
         <div class="index-posting-list">
             <!-- individual postings -->
-            <div
-                 ng-repeat="posting in postings"
+            <div ng-repeat="posting in postings"
                  ng-if="displayPostingFn(posting)"
                  class="index-posting-container background{{$index % 5}}">
-                <h2 class="posting-name">
+                <h2 class="posting-name"
+                    data-toggle="modal" data-target="#posting-modal-{{$index}}">
                     {{posting.name}}
                 </h2>
-                <div class="index-posting-desc-container">
+                <div class="index-posting-desc-container"
+                    data-toggle="modal" data-target="#posting-modal-{{$index}}">
                     <p><em>{{posting.location}}, {{posting.pay}}</em></p>
                     <p>
                         {{posting.description}}
@@ -118,6 +119,7 @@
             </div>
         </div>
         <div class="footer">
+            <p>INTERN FOR GOOD</p>
         </div>
     </body>
 </html>
